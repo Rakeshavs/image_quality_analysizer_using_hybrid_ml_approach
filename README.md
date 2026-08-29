@@ -6,15 +6,27 @@ A full-stack, **locally-run** image quality assessment and defect detection syst
 
 ## Architecture
 
-```
-React Frontend (Vite)
-        │
-    REST API
-        │
-FastAPI Backend
-        ├── OpenCV CV Engine  (10 features extracted per image)
-        ├── ML Engine         (Random Forest classifier)
-        └── SQLite Database   (analysis history CRUD)
+```mermaid
+flowchart LR
+    subgraph FE[Frontend]
+        UI[React (Vite) UI]
+    end
+    subgraph BE[Backend]
+        API[FastAPI REST API]
+        CV[OpenCV CV Engine]
+        ML[Random Forest ML Engine]
+        DB[SQLite DB]
+    end
+    UI -->|POST /api/analyze| API
+    API --> CV
+    API --> ML
+    CV -->|Features| ML
+    ML -->|Prediction| API
+    API --> DB
+    DB -->|History CRUD| API
+    style FE fill:#0d6efd,color:#fff,stroke:#2c3e50,stroke-width:2px
+    style BE fill:#6c757d,color:#fff,stroke:#2c3e50,stroke-width:2px
+    classDef default font-family:"Inter",sans-serif;
 ```
 
 ## Detected Defect Classes
