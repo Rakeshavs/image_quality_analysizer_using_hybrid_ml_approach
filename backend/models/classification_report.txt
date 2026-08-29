@@ -1,0 +1,12 @@
+              precision    recall  f1-score   support
+
+        BLUR       1.00      0.96      0.98        25
+   CORRUPTED       0.96      0.87      0.92        31
+        GOOD       0.75      0.86      0.80        28
+       NOISY       0.83      0.90      0.86        21
+ OVEREXPOSED       0.86      0.79      0.83        24
+UNDEREXPOSED       1.00      1.00      1.00        27
+
+    accuracy                           0.90       156
+   macro avg       0.90      0.90      0.90       156
+weighted avg       0.90      0.90      0.90       156

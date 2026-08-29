@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+opencv-python-headless
+scikit-learn
+SQLAlchemy
+python-multipart
+matplotlib
+pandas
+joblib

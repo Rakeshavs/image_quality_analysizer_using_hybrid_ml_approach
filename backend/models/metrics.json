@@ -1,0 +1,20 @@
+{
+  "accuracy": 0.8974358974358975,
+  "f1_score": 0.898879024789647,
+  "precision": 0.9036407433146564,
+  "recall": 0.8974358974358975,
+  "feature_importances": {
+    "sharpness_laplacian_var": 0.1963758232804705,
+    "sharpness_tenengrad": 0.11183362950368099,
+    "brightness_mean": 0.1449513607845033,
+    "brightness_std": 0.12796043183214806,
+    "exposure_histogram_skew": 0.06661498374955885,
+    "noise_residual_std": 0.10817187071293366,
+    "contrast_michelson": 0.038495376107065514,
+    "saturation_mean": 0.06315624042566707,
+    "entropy": 0.14244028360397212,
+    "corruption_score": 0.0
+  },
+  "n_train_samples": 624,
+  "n_test_samples": 156
+}
