@@ -42,6 +42,29 @@ FastAPI Backend
 | Saturation Mean | Color vibrancy |
 | Shannon Entropy | Image information density |
 | Corruption Score | Decode integrity |
+## Dataset
+
+The training data is sourced from the **DIV2K** high‑resolution image dataset (publicly available at https://data.vision.ee.ethz.ch/cvl/DIV2K/). The repository contains the `DIV2K_train_HR` and `DIV2K_valid_HR` folders.
+
+### Synthetic degradation pipeline
+
+Because a large manually‑labeled defect dataset is not available, we generate a **synthetic** training set by applying controlled degradations to the pristine DIV2K images:
+
+- **Blur** – Gaussian and motion blur with varying kernel sizes.
+- **Noise** – Gaussian noise with different standard deviations.
+- **Exposure shifts** – Under‑exposure and over‑exposure adjustments.
+- **JPEG compression artifacts** – Varying quality factors to simulate corruption.
+- **Color saturation changes** – To mimic wash‑out or oversaturated scenes.
+
+Each original image is duplicated multiple times, each copy receiving one of the above defect types (or a combination), and labeled accordingly (`GOOD`, `BLUR`, `NOISY`, `UNDEREXPOSED`, `OVEREXPOSED`, `CORRUPTED`).
+
+### Split strategy
+
+- **Training set** – 70 % of the generated images.
+- **Validation set** – 15 % (used during model selection).
+- **Test set** – 15 % (held‑out for final evaluation; metrics reported in the README).
+
+The synthetic approach ensures a balanced representation of each defect class while keeping the data generation fully reproducible.
 
 ---
 
