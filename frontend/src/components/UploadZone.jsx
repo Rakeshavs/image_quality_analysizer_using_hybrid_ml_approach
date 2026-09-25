@@ -23,7 +23,7 @@ export default function UploadZone({ onFileSelected, disabled }) {
 
   return (
     <div
-      className={`upload-zone${dragOver ? ' drag-over' : ''}`}
+      className={`upload-zone-3d${dragOver ? ' drag-over' : ''}`}
       onClick={() => !disabled && inputRef.current?.click()}
       onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
       onDragLeave={() => setDragOver(false)}
@@ -32,21 +32,23 @@ export default function UploadZone({ onFileSelected, disabled }) {
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && inputRef.current?.click()}
     >
-      <div className="upload-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <div className="upload-icon-wrap">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="17 8 12 3 7 8"/>
           <line x1="12" y1="3" x2="12" y2="15"/>
         </svg>
       </div>
-      <p className="upload-title">
-        {dragOver ? 'Drop image here' : 'Drag & Drop your image'}
-      </p>
+
+      <h3 className="upload-title">
+        {dragOver ? 'Drop image to analyze' : 'Drag & Drop your image'}
+      </h3>
+
       <p className="upload-sub">or click to browse from your computer</p>
 
-      <div className="upload-formats">
+      <div className="upload-formats-wrap">
         {['JPEG', 'PNG', 'BMP', 'WebP', 'TIFF'].map(f => (
-          <span className="format-badge" key={f}>{f}</span>
+          <span className="format-badge-3d" key={f}>{f}</span>
         ))}
       </div>
 

@@ -1,13 +1,14 @@
 import { useState, useCallback } from 'react';
 import UploadZone from '../components/UploadZone';
-import ScoreGauge from '../components/ScoreGauge';
+import ScoreGauge3D from '../components/ScoreGauge3D';
+import Card3D from '../components/Card3D';
 import ExplainabilityPanel from '../components/ExplainabilityPanel';
 import IssueList from '../components/IssueList';
 import StatCard from '../components/StatCard';
 import { analyzeImage } from '../services/api';
 
 function getLabelForScore(label) {
-  if (label === 'GOOD') return 'ACCEPTABLE';
+  if (label === 'GOOD') return 'OPTIMAL';
   if (['BLUR', 'NOISY', 'UNDEREXPOSED', 'OVEREXPOSED'].includes(label)) return 'DEGRADED';
   if (label === 'CORRUPTED') return 'DEFECTIVE';
   return label;
@@ -55,145 +56,147 @@ export default function InspectorPage() {
 
   return (
     <div className="page">
-      <h1 className="page-title">Image Quality Inspector</h1>
-      <p className="page-subtitle">
-        Upload an image to analyze its quality using our hybrid CV + ML pipeline.
-      </p>
+      <div className="page-hero">
+        <h1 className="page-title-large">3D Image Quality Studio</h1>
+        <p className="page-subtitle">
+          Next-generation hybrid computer vision & ML defect analysis engine with sub-pixel explainability.
+        </p>
+      </div>
 
       {!result && !loading && (
-        <>
+        <Card3D glowColor="rgba(99, 102, 241, 0.2)">
           <UploadZone onFileSelected={handleFileSelected} disabled={loading} />
 
           {file && (
             <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-              <button className="btn btn-primary" onClick={handleAnalyze} id="analyze-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <button className="btn-3d btn-primary-3d" onClick={handleAnalyze} id="analyze-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
-                Analyze Image
+                Analyze Image Quality
               </button>
-              <button className="btn btn-ghost" onClick={handleReset} id="reset-btn">
+              <button className="btn-3d btn-ghost-3d" onClick={handleReset} id="reset-btn">
                 Clear
               </button>
             </div>
           )}
 
           {file && preview && (
-            <div style={{ marginTop: '1.5rem', maxWidth: '400px', margin: '1.5rem auto 0' }}>
-              <div className="card">
-                <div className="section-header">
-                  <span className="section-title">Selected Image</span>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    {(file.size / 1024).toFixed(0)} KB
-                  </span>
-                </div>
-                <div className="image-preview-wrap">
-                  <img src={preview} alt="Preview" />
-                </div>
+            <div style={{ marginTop: '1.5rem', maxWidth: '420px', margin: '1.5rem auto 0' }}>
+              <div className="section-header">
+                <span className="section-title">Selected Image</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  {(file.size / 1024).toFixed(0)} KB
+                </span>
+              </div>
+              <div className="image-preview-3d">
+                <img src={preview} alt="Preview" />
               </div>
             </div>
           )}
-        </>
+        </Card3D>
       )}
 
       {loading && (
-        <div className="analyzing-state">
+        <Card3D glowColor="rgba(139, 92, 246, 0.3)" style={{ textAlign: 'center', padding: '3rem 2rem' }}>
           <div className="spinner" />
-          <p>Extracting visual features and running ML analysis...</p>
-          <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-            Blur · Exposure · Noise · Contrast · Entropy
+          <h2 style={{ fontSize: '1.3rem', fontWeight: 700, margin: '1rem 0 0.5rem' }}>Extracting 3D Feature Topography...</h2>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+            Processing Laplacian sharpness variance, Shannon entropy, & high-frequency spatial noise.
           </p>
-        </div>
+        </Card3D>
       )}
 
       {error && (
-        <div className="card" style={{ marginTop: '1.5rem', borderColor: 'rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.05)' }}>
-          <p style={{ color: 'var(--status-defective)' }}>⚠ Analysis failed: {error}</p>
-          <button className="btn btn-ghost" style={{ marginTop: '1rem' }} onClick={handleReset}>Try Again</button>
-        </div>
+        <Card3D glowColor="rgba(239, 68, 68, 0.3)" style={{ borderColor: 'rgba(239,68,68,0.4)', background: 'rgba(239,68,68,0.05)' }}>
+          <p style={{ color: 'var(--status-defective)', fontWeight: 600 }}>⚠ Analysis Error: {error}</p>
+          <button className="btn-3d btn-ghost-3d" style={{ marginTop: '1rem' }} onClick={handleReset}>Try Again</button>
+        </Card3D>
       )}
 
       {result && (
         <>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-            <button className="btn btn-ghost" onClick={handleReset} id="new-analysis-btn">
-              ＋ New Analysis
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.25rem' }}>
+            <button className="btn-3d btn-ghost-3d" onClick={handleReset} id="new-analysis-btn">
+              ＋ Inspect Another Image
             </button>
           </div>
 
-          <div className="results-grid">
+          <div className="results-grid-3d">
             {/* LEFT COLUMN */}
-            <div className="results-left">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               {/* Image Preview */}
-              <div className="card">
-                <div className="section-header" style={{ marginBottom: '0.75rem' }}>
-                  <span className="section-title">Image Preview</span>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+              <Card3D glowColor="rgba(6, 182, 212, 0.25)">
+                <div className="section-header">
+                  <span className="section-title">Visual Canvas</span>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                     {result.image_width}×{result.image_height}px
                   </span>
                 </div>
-                <div className="image-preview-wrap">
+                <div className="image-preview-3d">
                   <img src={preview} alt={file?.name} />
-                  <div className="image-meta">{file?.name}</div>
                 </div>
-              </div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem', textAlign: 'center' }}>
+                  {file?.name}
+                </div>
+              </Card3D>
 
               {/* Score Gauge */}
-              <div className="card" style={{ textAlign: 'center' }}>
-                <div className="section-header" style={{ marginBottom: '1.25rem', justifyContent: 'center' }}>
-                  <span className="section-title">Quality Score</span>
+              <Card3D glowColor="rgba(99, 102, 241, 0.3)" style={{ textAlign: 'center' }}>
+                <div className="section-header" style={{ justifyContent: 'center' }}>
+                  <span className="section-title">Quality Index</span>
                 </div>
-                <ScoreGauge score={result.quality_score} label={displayLabel} />
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.75rem' }}>
-                  Detected class: <strong style={{ color: 'var(--text-secondary)' }}>{result.quality_label}</strong>
+                <ScoreGauge3D score={result.quality_score} label={displayLabel} />
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '1rem' }}>
+                  Classifier label: <strong style={{ color: 'var(--text-primary)' }}>{result.quality_label}</strong>
                 </p>
-              </div>
+              </Card3D>
             </div>
 
             {/* RIGHT COLUMN */}
-            <div className="results-right">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               {/* Explainability */}
-              <div className="card">
+              <Card3D glowColor="rgba(139, 92, 246, 0.25)">
                 <div className="section-header">
-                  <span className="section-title">Why this score?</span>
+                  <span className="section-title">Feature Explainability</span>
                   <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    Sub-dimension breakdown
+                    Visual sub-dimension scores
                   </span>
                 </div>
                 <ExplainabilityPanel explainability={result.explainability} />
-              </div>
+              </Card3D>
 
               {/* Issues */}
-              <div className="card">
+              <Card3D glowColor="rgba(245, 158, 11, 0.25)">
                 <div className="section-header">
-                  <span className="section-title">Detected Issues</span>
+                  <span className="section-title">Defect Diagnostics</span>
                   <span style={{
                     fontSize: '0.75rem',
                     background: result.issues.length ? 'rgba(245,158,11,0.15)' : 'rgba(16,185,129,0.15)',
                     color: result.issues.length ? 'var(--status-degraded)' : 'var(--status-good)',
-                    padding: '2px 8px', borderRadius: '8px', fontWeight: 600
+                    padding: '4px 10px', borderRadius: '12px', fontWeight: 700
                   }}>
-                    {result.issues.length} issue{result.issues.length !== 1 ? 's' : ''}
+                    {result.issues.length} flag{result.issues.length !== 1 ? 's' : ''}
                   </span>
                 </div>
                 <IssueList issues={result.issues} />
-              </div>
+              </Card3D>
 
               {/* Statistics */}
               {stats && (
-                <div className="card">
-                  <div className="section-header" style={{ marginBottom: '1rem' }}>
-                    <span className="section-title">Image Statistics</span>
+                <Card3D glowColor="rgba(16, 185, 129, 0.2)">
+                  <div className="section-header">
+                    <span className="section-title">OpenCV Feature Metrics</span>
                   </div>
-                  <div className="stats-grid">
+                  <div className="stats-grid-3d">
                     <StatCard label="Brightness" value={stats.brightness} />
                     <StatCard label="Contrast" value={stats.contrast} />
                     <StatCard label="Sharpness" value={stats.sharpness} />
-                    <StatCard label="Noise Level" value={stats.noise_level} />
+                    <StatCard label="Noise Std" value={stats.noise_level} />
                     <StatCard label="Entropy" value={stats.entropy} />
                     <StatCard label="Saturation" value={stats.saturation} />
                   </div>
-                </div>
+                </Card3D>
               )}
             </div>
           </div>
